@@ -18,8 +18,9 @@ export function useMusic(musicUrl?: string) {
     if (!audioRef.current) {
       console.log('🎵 Creating audio instance with URL:', musicUrl);
       
-      const audio = new Audio();
-      audio.volume = 1; // Maximum volume as per requirements
+      // Try using createElement instead of new Audio() - better compatibility
+      const audio = document.createElement('audio');
+      audio.volume = 1;
       audio.loop = true;
       audio.preload = 'auto';
       
@@ -27,8 +28,16 @@ export function useMusic(musicUrl?: string) {
       const fullUrl = musicUrl.startsWith('http') ? musicUrl : window.location.origin + musicUrl;
       console.log('🎵 Full audio URL:', fullUrl);
       
+      // IMPORTANT: Don't set crossorigin for same-origin files
+      // audio.setAttribute('crossorigin', 'anonymous');
+      
+      // Set src
       audio.src = musicUrl;
       console.log('🎵 Audio src set to:', audio.src);
+      
+      // Check if browser supports this audio type
+      const canPlayMP3 = audio.canPlayType('audio/mpeg');
+      console.log('🎵 Can play audio/mpeg:', canPlayMP3);
 
       audio.addEventListener('loadstart', () => {
         console.log('🎵 Load started');
@@ -53,20 +62,28 @@ export function useMusic(musicUrl?: string) {
         console.error('Audio src:', audio.src);
         console.error('Audio error code:', audio.error?.code);
         console.error('Audio error message:', audio.error?.message);
+        console.error('Audio network state:', audio.networkState);
+        console.error('Audio ready state:', audio.readyState);
         
-        // Error codes:
-        // 1 = MEDIA_ERR_ABORTED - The user canceled the audio
-        // 2 = MEDIA_ERR_NETWORK - A network error occurred
-        // 3 = MEDIA_ERR_DECODE - An error occurred while decoding
-        // 4 = MEDIA_ERR_SRC_NOT_SUPPORTED - Audio not supported or src empty
+        // Try to get more info about why it failed
+        if (audio.error) {
+          console.error('Detailed error:', {
+            code: audio.error.code,
+            message: audio.error.message,
+            MEDIA_ERR_ABORTED: 1,
+            MEDIA_ERR_NETWORK: 2,
+            MEDIA_ERR_DECODE: 3,
+            MEDIA_ERR_SRC_NOT_SUPPORTED: 4
+          });
+        }
         
         let errorMsg = 'Unknown error';
         if (audio.error) {
           switch(audio.error.code) {
             case 1: errorMsg = 'Loading aborted'; break;
             case 2: errorMsg = 'Network error'; break;
-            case 3: errorMsg = 'Decoding error'; break;
-            case 4: errorMsg = 'Source not supported or empty'; break;
+            case 3: errorMsg = 'Decoding error - file may be corrupted'; break;
+            case 4: errorMsg = 'Source not supported - codec issue'; break;
           }
         }
         
@@ -86,7 +103,11 @@ export function useMusic(musicUrl?: string) {
 
       // Try to load the audio
       console.log('🎵 Calling audio.load()...');
-      audio.load();
+      try {
+        audio.load();
+      } catch (err) {
+        console.error('❌ Error calling load():', err);
+      }
 
       audioRef.current = audio;
       console.log('🎵 Audio instance created and stored in ref');

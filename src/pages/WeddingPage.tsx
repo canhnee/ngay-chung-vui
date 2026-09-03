@@ -20,7 +20,9 @@ export default function WeddingPage() {
   
   // Music hook - ALWAYS use fallback path to ensure audio loads
   // Add cache busting for development
-  const musicUrl = '/audio/audio_doanket.mp3';
+  // TESTING: Use external MP3 to verify code works
+  const musicUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; // Test URL
+  // const musicUrl = '/audio/audio_doanket.mp3'; // Your audio - has codec issue
   
   // Debug: Log music URL
   console.log('🎵 Music URL:', musicUrl);

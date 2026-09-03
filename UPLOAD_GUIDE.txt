@@ -1,0 +1,160 @@
+📦 HƯỚNG DẪN UPLOAD AUDIO VÀ ẢNH LÊN SUPABASE
+
+===================
+BƯỚC 1: SETUP SUPABASE STORAGE
+===================
+
+1. Vào Supabase Dashboard: https://supabase.com/dashboard
+2. Chọn project của bạn
+3. Vào "SQL Editor" (sidebar bên trái)
+4. Copy toàn bộ nội dung file: SUPABASE_STORAGE_SETUP.sql
+5. Paste vào SQL Editor và click "Run"
+6. Kiểm tra kết quả - phải thấy "Success. No rows returned"
+
+Hoặc tạo bucket thủ công:
+1. Vào "Storage" trong sidebar
+2. Click "New bucket"
+3. Tạo 2 buckets:
+   - Name: wedding-photos, Public: YES
+   - Name: wedding-music, Public: YES
+
+===================
+BƯỚC 2: CHẠY SCRIPT UPLOAD
+===================
+
+Option A - Upload qua Script (TỰ ĐỘNG):
+----------------------------------------
+npm run upload-storage
+
+Script sẽ:
+✅ Upload file audio_doanket.mp3 lên bucket wedding-music
+✅ Upload 28 ảnh lên bucket wedding-photos  
+✅ Tự động update URLs trong fallbackWedding.ts
+✅ Hiển thị progress và public URLs
+
+Option B - Upload thủ công qua Dashboard:
+-----------------------------------------
+1. Vào Storage > wedding-music
+2. Click "Upload file"
+3. Chọn: public/audio/audio_doanket.mp3
+4. Click Upload
+
+5. Vào Storage > wedding-photos
+6. Click "Upload files" (multiple)
+7. Chọn tất cả 28 ảnh trong public/wedding-img/
+8. Click Upload
+
+9. Copy public URLs:
+   - Click vào từng file
+   - Click "Copy URL"
+   - Update URLs trong src/data/fallbackWedding.ts
+
+===================
+BƯỚC 3: UPDATE CODE (nếu upload thủ công)
+===================
+
+Mở file: src/data/fallbackWedding.ts
+
+Thay đổi URLs:
+
+TỪ:
+  music_url: '/audio/audio_doanket.mp3'
+  image_url: '/wedding-img/anh1.jpg'
+
+THÀNH:
+  music_url: 'https://[project-id].supabase.co/storage/v1/object/public/wedding-music/audio_doanket.mp3'
+  image_url: 'https://[project-id].supabase.co/storage/v1/object/public/wedding-photos/anh1.jpg'
+
+Lặp lại cho tất cả 28 ảnh.
+
+===================
+BƯỚC 4: TEST LOCAL
+===================
+
+1. Refresh dev server:
+   Ctrl + C (stop server)
+   npm run dev
+
+2. Hard refresh browser:
+   Ctrl + Shift + R
+
+3. Click "TAP TO OPEN"
+
+4. Kiểm tra:
+   ✅ Nhạc phát được
+   ✅ Ảnh load từ Supabase CDN
+   ✅ Không có lỗi trong Console
+
+===================
+BƯỚC 5: DEPLOY
+===================
+
+1. Commit changes:
+   git add .
+   git commit -m "Upload assets to Supabase Storage"
+   git push
+
+2. Deploy lên Vercel (tự động)
+
+3. Test production URL
+
+===================
+LỢI ÍCH CỦA SUPABASE STORAGE
+===================
+
+✅ CDN toàn cầu - Load nhanh từ mọi nơi
+✅ Automatic image optimization (nếu dùng transform)
+✅ File được serve với đúng MIME type
+✅ Giải quyết vấn đề codec audio
+✅ Không tốn dung lượng Vercel deploy
+✅ Bandwidth cao (free 2GB/ngày)
+✅ Dễ quản lý files qua Dashboard
+
+===================
+IMAGE OPTIMIZATION (BONUS)
+===================
+
+Supabase hỗ trợ image transformation:
+
+Thay vì:
+https://[project].supabase.co/storage/v1/object/public/wedding-photos/anh1.jpg
+
+Dùng:
+https://[project].supabase.co/storage/v1/render/image/public/wedding-photos/anh1.jpg?width=800&quality=80
+
+Tự động:
+- Resize về 800px width
+- Compress quality 80%
+- Convert sang WebP (nếu browser hỗ trợ)
+
+===================
+TROUBLESHOOTING
+===================
+
+❌ Lỗi "new row violates row-level security policy"
+→ Chạy lại SUPABASE_STORAGE_SETUP.sql
+→ Đảm bảo buckets có public = true
+
+❌ Upload script fail
+→ Kiểm tra .env có đầy đủ credentials
+→ Chạy: cat .env | grep SUPABASE
+
+❌ Audio vẫn không phát
+→ Mở Network tab, check audio URL
+→ Click vào audio request, xem response
+→ Đảm bảo status 200 và Content-Type: audio/mpeg
+
+❌ Ảnh không hiển thị
+→ Check Console có lỗi CORS không
+→ Đảm bảo bucket là public
+→ Test URL trực tiếp trong browser
+
+===================
+DONE!
+===================
+
+Sau khi làm xong, bạn sẽ có:
+✅ Audio và ảnh trên Supabase CDN
+✅ Website load nhanh hơn
+✅ Audio phát được (không còn codec issue)
+✅ Dễ dàng update files sau này
