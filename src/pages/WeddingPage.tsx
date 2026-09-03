@@ -54,10 +54,15 @@ export default function WeddingPage() {
     // Initialize and start music
     setMusicStarted(true);
     
-    // Small delay to ensure audio is ready
-    setTimeout(() => {
-      play();
-    }, 500);
+    // Wait for audio to be ready then play
+    setTimeout(async () => {
+      try {
+        await play();
+        console.log('✅ Music started after opening');
+      } catch (error) {
+        console.error('❌ Failed to start music:', error);
+      }
+    }, 1000); // Wait 1 second for audio to initialize
 
     // Hide opening after transition
     setTimeout(() => {
