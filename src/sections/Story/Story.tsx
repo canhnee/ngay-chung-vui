@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import SectionTitle from '../../components/SectionTitle/SectionTitle';
+import LazyImage from '../../components/LazyImage/LazyImage';
 import type { Photo } from '../../types/wedding';
 
 interface StoryProps {
@@ -81,12 +82,11 @@ export default function Story({ photos, storyText }: StoryProps) {
                     : 'h-[60vh]'
                 } overflow-hidden`}
               >
-                {/* Photo */}
-                <img
+                {/* Photo with lazy loading */}
+                <LazyImage
                   src={photo.image_url}
                   alt={photo.title || 'Wedding photo'}
                   className="w-full h-full object-cover"
-                  loading="lazy"
                 />
 
                 {/* Overlay gradient */}

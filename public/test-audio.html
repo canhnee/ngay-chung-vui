@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #1a1a1a;
+            color: white;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #log {
+            margin-top: 20px;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Audio Test Page</h1>
+    <p>Test if audio file loads and plays correctly:</p>
+    
+    <button onclick="testAudio()">Test Audio Playback</button>
+    <button onclick="clearLog()">Clear Log</button>
+    
+    <div id="log"></div>
+    
+    <script>
+        const logDiv = document.getElementById('log');
+        
+        function log(message) {
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${time}] ${message}<br>`;
+        }
+        
+        function clearLog() {
+            logDiv.innerHTML = '';
+        }
+        
+        function testAudio() {
+            log('🎵 Starting audio test...');
+            
+            const audio = new Audio();
+            audio.volume = 1;
+            audio.loop = true; // Loop continuously
+            
+            const audioUrl = '/audio/audio_doanket.mp3';
+            log(`🎵 Audio URL: ${audioUrl}`);
+            log(`🎵 Full URL: ${window.location.origin}${audioUrl}`);
+            
+            audio.addEventListener('loadstart', () => {
+                log('✅ Load started');
+            });
+            
+            audio.addEventListener('loadedmetadata', () => {
+                log('✅ Metadata loaded');
+                log(`   Duration: ${audio.duration} seconds`);
+            });
+            
+            audio.addEventListener('loadeddata', () => {
+                log('✅ Data loaded');
+            });
+            
+            audio.addEventListener('canplay', () => {
+                log('✅ Can play');
+            });
+            
+            audio.addEventListener('canplaythrough', () => {
+                log('✅ Can play through');
+            });
+            
+            audio.addEventListener('playing', () => {
+                log('✅ Audio is playing!');
+            });
+            
+            audio.addEventListener('error', (e) => {
+                log(`❌ Error occurred!`);
+                log(`   Error code: ${audio.error?.code}`);
+                log(`   Error message: ${audio.error?.message}`);
+                log(`   Audio src: ${audio.src}`);
+                
+                // Error codes:
+                // 1 = MEDIA_ERR_ABORTED
+                // 2 = MEDIA_ERR_NETWORK  
+                // 3 = MEDIA_ERR_DECODE
+                // 4 = MEDIA_ERR_SRC_NOT_SUPPORTED
+            });
+            
+            audio.src = audioUrl;
+            log('🎵 src set, loading...');
+            audio.load();
+            
+            // Try to play after 1 second
+            setTimeout(() => {
+                log('🎵 Attempting to play...');
+                audio.play()
+                    .then(() => {
+                        log('✅ Play succeeded!');
+                        log('🎵 Audio will loop continuously...');
+                        // Don't stop - let it play
+                    })
+                    .catch(err => {
+                        log(`❌ Play failed: ${err.message}`);
+                    });
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+HƯỚNG DẪN TỐI ƯU HÌNH ẢNH (Nếu vẫn thấy chậm)
+
+===================
+OPTION 1: SỬ DỤNG ONLINE TOOLS (KHUYÊN DÙNG)
+===================
+
+1. Squoosh (Google):
+   - Vào: https://squoosh.app
+   - Kéo thả từng ảnh vào
+   - Chọn format: WebP
+   - Quality: 80-85%
+   - Download và thay thế ảnh cũ
+
+2. TinyPNG:
+   - Vào: https://tinypng.com
+   - Upload tối đa 20 ảnh cùng lúc
+   - Tự động optimize
+   - Download tất cả
+
+3. ImageOptim (Mac only):
+   - Download: https://imageoptim.com
+   - Kéo thả folder vào
+   - Tự động optimize tất cả ảnh
+
+===================
+OPTION 2: SỬ DỤNG CLOUDINARY CDN (MIỄN PHÍ)
+===================
+
+1. Đăng ký Cloudinary:
+   - Vào: https://cloudinary.com
+   - Free plan: 25GB bandwidth/tháng
+
+2. Upload ảnh:
+   - Upload tất cả 28 ảnh lên Cloudinary
+   - Copy URLs
+
+3. Update code:
+   - Mở: src/data/fallbackWedding.ts
+   - Thay đổi image_url từ:
+     '/wedding-img/anh1.jpg'
+   - Thành:
+     'https://res.cloudinary.com/your-cloud/image/upload/f_auto,q_auto/anh1'
+
+4. Cloudinary sẽ tự động:
+   - Chuyển sang WebP cho Chrome
+   - Chuyển sang AVIF cho Safari
+   - Resize theo device
+   - Cache trên CDN toàn cầu
+
+===================
+OPTION 3: SUPABASE STORAGE
+===================
+
+1. Vào Supabase Dashboard
+2. Storage > Create bucket: "wedding-photos"
+3. Set public access
+4. Upload 28 ảnh
+5. Copy public URLs
+6. Update fallbackWedding.ts
+
+Ưu điểm:
+- Đã có sẵn Supabase
+- Không cần service khác
+- Có CDN
+
+===================
+KẾT QUẢ DỰ KIẾN
+===================
+
+TRƯỚC KHI TỐI ƯU:
+- Mỗi ảnh JPG: ~500KB - 2MB
+- 28 ảnh: ~30-40MB total
+- Load time: 5-10 giây trên 4G
+
+SAU KHI TỐI ƯU:
+- Mỗi ảnh WebP: ~100-300KB
+- 28 ảnh: ~5-8MB total
+- Load time: 1-2 giây trên 4G
+
+SAU KHI DÙNG CDN:
+- Load time: <1 giây (cache)
+- Bandwidth tiết kiệm 70%
+
+===================
+KHUYẾN NGHỊ
+===================
+
+Thứ tự ưu tiên:
+1. Deploy lên Vercel với code hiện tại
+2. Test xem có đủ nhanh chưa
+3. Nếu vẫn chậm → dùng TinyPNG compress ảnh
+4. Nếu traffic cao → chuyển sang Cloudinary CDN
+
+Với lazy loading đã implement, website đã nhanh hơn nhiều!
+Chỉ cần optimize thêm nếu thực sự cần thiết.

@@ -14,14 +14,25 @@ import Finale from '../sections/Finale/Finale';
 
 export default function WeddingPage() {
   const [showOpening, setShowOpening] = useState(true);
-  const [musicStarted, setMusicStarted] = useState(false);
   
   // Get wedding data
-  const { data } = useWedding('pham-hoa-tuan-anh');
+  const { data, loading } = useWedding('pham-hoa-tuan-anh');
   
-  // Music hook - will be initialized after TAP TO OPEN
-  const musicUrl = data.music[0]?.music_url || '/audio/audio_doanket.mp3';
-  const { play, pause } = useMusic(musicStarted ? musicUrl : undefined);
+  // Music hook - ALWAYS use fallback path to ensure audio loads
+  // Add cache busting for development
+  const musicUrl = '/audio/audio_doanket.mp3';
+  
+  // Debug: Log music URL
+  console.log('🎵 Music URL:', musicUrl);
+  console.log('🎵 Data loading:', loading);
+  console.log('🎵 Music from data:', data.music);
+  console.log('🎵 Window location origin:', window.location.origin);
+  
+  const { play, pause, isReady, error: audioError } = useMusic(musicUrl);
+  
+  // More debug info
+  console.log('🎵 Audio ready:', isReady);
+  console.log('🎵 Audio error:', audioError);
 
   // Get photos by section
   const storyPhotos = useMemo(
@@ -50,19 +61,18 @@ export default function WeddingPage() {
     return openingPhotos[0]?.image_url || storyPhotos[0]?.image_url || '/wedding-img/anh1.jpg';
   }, [data.photos, storyPhotos]);
 
-  const handleOpenInvitation = async () => {
-    // Initialize and start music
-    setMusicStarted(true);
+  const handleOpenInvitation = () => {
+    console.log('🎬 Opening invitation...');
     
-    // Wait for audio to be ready then play
-    setTimeout(async () => {
-      try {
-        await play();
-        console.log('✅ Music started after opening');
-      } catch (error) {
-        console.error('❌ Failed to start music:', error);
-      }
-    }, 1000); // Wait 1 second for audio to initialize
+    // Play music immediately (browser requires user interaction)
+    console.log('🎵 Attempting to play music...');
+    play().catch(err => {
+      console.error('❌ Music play failed:', err);
+      // Retry after a short delay if failed
+      setTimeout(() => {
+        play().catch(e => console.error('❌ Retry failed:', e));
+      }, 500);
+    });
 
     // Hide opening after transition
     setTimeout(() => {
@@ -103,10 +113,9 @@ export default function WeddingPage() {
         />
       )}
 
-      {/* Music player - only show after opening */}
-      {/* Removed: Music toggle button - music always plays after TAP TO OPEN */}
+      {/* Music player - removed as per requirements */}
 
-      {/* Main content */}
+      {/* Main content - only render after opening */}
       {!showOpening && (
         <div className="min-h-screen bg-black">
           {/* Hero section */}

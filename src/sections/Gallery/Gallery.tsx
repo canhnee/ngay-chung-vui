@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import SectionTitle from '../../components/SectionTitle/SectionTitle';
+import LazyImage from '../../components/LazyImage/LazyImage';
 import type { Photo } from '../../types/wedding';
 
 interface GalleryProps {
@@ -100,12 +101,11 @@ export default function Gallery({ photos }: GalleryProps) {
                   className={`gallery-item relative ${heightClass} ${spanClass} group cursor-pointer overflow-hidden`}
                   onClick={() => setSelectedPhoto(photo)}
                 >
-                  {/* Photo */}
-                  <img
+                  {/* Photo with lazy loading */}
+                  <LazyImage
                     src={photo.image_url}
                     alt={photo.title || 'Gallery photo'}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
                   />
 
                   {/* Overlay on hover */}
