@@ -125,7 +125,7 @@ export default function Hero({
   return (
     <section
       ref={heroRef}
-      className="relative h-screen w-full overflow-hidden bg-black"
+      className="relative h-screen w-full overflow-hidden bg-gradient-to-b from-sage-100 to-sage-200"
     >
       {/* Hero Image */}
       <div

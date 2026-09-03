@@ -11,9 +11,13 @@ import WeddingDetails from '../sections/WeddingDetails/WeddingDetails';
 import Countdown from '../components/Countdown/Countdown';
 import Locations from '../components/Locations/Locations';
 import Finale from '../sections/Finale/Finale';
+import ParticlesEffect from '../components/ParticlesEffect/ParticlesEffect';
+import Fireworks from '../components/Fireworks/Fireworks';
+import CursorTrail from '../components/CursorTrail/CursorTrail';
 
 export default function WeddingPage() {
   const [showOpening, setShowOpening] = useState(true);
+  const [showFireworks, setShowFireworks] = useState(false);
   
   // Get wedding data
   const { data } = useWedding('pham-hoa-tuan-anh');
@@ -67,6 +71,11 @@ export default function WeddingPage() {
       }, 500);
     });
 
+    // Show fireworks
+    setTimeout(() => {
+      setShowFireworks(true);
+    }, 800);
+
     // Hide opening after transition
     setTimeout(() => {
       setShowOpening(false);
@@ -97,6 +106,18 @@ export default function WeddingPage() {
 
   return (
     <>
+      {/* Particles Effect - always visible */}
+      {!showOpening && <ParticlesEffect />}
+      
+      {/* Cursor Trail - always visible */}
+      {!showOpening && <CursorTrail />}
+      
+      {/* Fireworks - show on opening */}
+      <Fireworks 
+        trigger={showFireworks} 
+        onComplete={() => setShowFireworks(false)} 
+      />
+
       {/* Opening screen */}
       {showOpening && (
         <Opening
@@ -110,7 +131,7 @@ export default function WeddingPage() {
 
       {/* Main content - only render after opening */}
       {!showOpening && (
-        <div className="min-h-screen bg-black">
+        <div className="min-h-screen bg-gradient-to-b from-sage-50 via-sage-100 to-sage-200">
           {/* Hero section */}
           <Hero
             groomName={data.wedding.groom_name}
