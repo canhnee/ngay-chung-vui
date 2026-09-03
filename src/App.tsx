@@ -1,11 +1,17 @@
-function App() {
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import WeddingPage from './pages/WeddingPage';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 
+function App() {
   return (
- 
-      <div className="w-full max-w-3xl rounded-2xl border border-slate-800 bg-slate-900/80 p-8 shadow-2xl backdrop-blur">
-        hello
-      </div>
-    
+    <Router>
+      <Routes>
+        <Route path="/" element={<WeddingPage />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      </Routes>
+    </Router>
   );
 }
 
