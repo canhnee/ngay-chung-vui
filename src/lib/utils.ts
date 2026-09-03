@@ -19,12 +19,47 @@ export function formatDate(dateString: string): string {
 }
 
 /**
+ * Parse Vietnamese date format (DD/MM/YYYY) to Date object
+ */
+function parseVietnameseDate(dateString: string): Date {
+  // Check if already in ISO format
+  if (dateString.includes('-')) {
+    return new Date(dateString);
+  }
+  
+  // Parse DD/MM/YYYY format
+  const parts = dateString.split('/');
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
+    const year = parseInt(parts[2], 10);
+    return new Date(year, month, day);
+  }
+  
+  // Fallback
+  return new Date(dateString);
+}
+
+/**
  * Calculate countdown to a specific date
  */
 export function getCountdown(targetDate: string) {
   try {
     const now = new Date().getTime();
-    const target = new Date(targetDate).getTime();
+    const target = parseVietnameseDate(targetDate).getTime();
+    
+    // Check if date is valid
+    if (isNaN(target)) {
+      console.error('Invalid target date:', targetDate);
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        isPast: false,
+      };
+    }
+    
     const difference = target - now;
 
     if (difference < 0) {
@@ -44,7 +79,8 @@ export function getCountdown(targetDate: string) {
       seconds: Math.floor((difference % (1000 * 60)) / 1000),
       isPast: false,
     };
-  } catch {
+  } catch (error) {
+    console.error('Error calculating countdown:', error);
     return {
       days: 0,
       hours: 0,

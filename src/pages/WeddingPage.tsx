@@ -16,7 +16,7 @@ export default function WeddingPage() {
   const [showOpening, setShowOpening] = useState(true);
   
   // Get wedding data
-  const { data, loading } = useWedding('pham-hoa-tuan-anh');
+  const { data } = useWedding('pham-hoa-tuan-anh');
   
   // Music hook - ALWAYS use fallback path to ensure audio loads
   const musicUrl = '/audio/audio_doanket.mp3';

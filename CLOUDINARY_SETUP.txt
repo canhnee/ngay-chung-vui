@@ -1,0 +1,65 @@
+📦 HƯỚNG DẪN SETUP CLOUDINARY
+
+===================
+BƯỚC 1: ĐĂNG KÝ & LẤY CREDENTIALS
+===================
+
+1. Đăng ký tại: https://cloudinary.com/users/register_free
+2. Verify email
+3. Login vào Dashboard
+4. Vào: Settings (⚙️) → Product Environment Credentials
+5. Copy 3 thông tin:
+   - Cloud Name
+   - API Key  
+   - API Secret
+
+===================
+BƯỚC 2: LƯU CREDENTIALS VÀO .ENV
+===================
+
+Mở file .env và thêm:
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+(Thay your_xxx bằng giá trị thật từ Dashboard)
+
+===================
+BƯỚC 3: UPLOAD FILES
+===================
+
+Cách 1 - Upload thủ công (Dashboard):
+1. Vào Media Library
+2. Click "Upload" → "Upload Files"  
+3. Chọn audio_doanket.mp3
+4. Upload xong → Click file
+5. Copy URL (dạng: https://res.cloudinary.com/xxx/video/upload/...)
+6. Gửi URL cho tôi
+
+Cách 2 - Upload qua Script (tự động):
+   npm install cloudinary
+   npm run upload-cloudinary
+
+===================
+SAU KHI CÓ URL
+===================
+
+Tôi sẽ update:
+- src/data/fallbackWedding.ts (music_url)
+- Remove file khỏi Git
+- Deploy lên Vercel
+
+Audio sẽ phát đúng trên Vercel! ✅
+
+===================
+LƯU Ý
+===================
+
+URL Cloudinary cho audio thường dạng:
+https://res.cloudinary.com/YOUR_CLOUD/video/upload/vX/audio_doanket.mp3
+
+Hoặc raw:
+https://res.cloudinary.com/YOUR_CLOUD/raw/upload/vX/audio_doanket.mp3
+
+Cả 2 đều work!

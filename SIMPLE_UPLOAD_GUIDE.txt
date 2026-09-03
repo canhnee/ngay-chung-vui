@@ -1,0 +1,59 @@
+🚀 HƯỚNG DẪN UPLOAD AUDIO LÊN SUPABASE
+
+===================
+CÁCH 1: THỦ CÔNG (5 PHÚT)
+===================
+
+1. Vào Supabase Dashboard
+2. Sidebar trái → Click "Storage" (icon 🗄️)
+3. Click "New bucket"
+   - Name: wedding-music
+   - Public: ✅ YES
+   - Create
+4. Click vào bucket "wedding-music"
+5. Click "Upload file"
+6. Chọn: public/audio/audio_doanket.mp3
+7. Upload
+8. Click vào file đã upload
+9. Click "Copy URL"
+10. Gửi URL cho tôi để update code!
+
+===================
+CÁCH 2: TỰ ĐỘNG (1 PHÚT)
+===================
+
+Chạy trong terminal:
+
+npm run upload-storage
+
+Script sẽ:
+✅ Tự động tạo bucket
+✅ Upload audio
+✅ Upload 28 ảnh
+✅ Update URLs trong code
+✅ Done!
+
+===================
+SAU KHI CÓ URL
+===================
+
+Ví dụ URL:
+https://abcxyz.supabase.co/storage/v1/object/public/wedding-music/audio_doanket.mp3
+
+Gửi URL này cho tôi, tôi sẽ:
+1. Update fallbackWedding.ts
+2. Git commit
+3. Deploy lên Vercel
+4. Audio sẽ nghe đúng!
+
+===================
+LƯU Ý
+===================
+
+❌ ĐỪNG VÀO TABLE EDITOR (music table)
+✅ VÀO STORAGE (upload files)
+
+Table Editor = Database rows (data)
+Storage = File storage (audio, images)
+
+Chúng ta cần STORAGE, không phải TABLE!

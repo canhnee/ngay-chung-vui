@@ -1,0 +1,56 @@
+🚨 FIX TẠM THỜI: Dùng Git LFS cho audio
+
+===================
+CÁCH 1: GIT LFS (Nếu muốn file trong repo)
+===================
+
+1. Install Git LFS:
+   git lfs install
+
+2. Track MP3 files:
+   git lfs track "*.mp3"
+
+3. Add .gitattributes:
+   git add .gitattributes
+
+4. Commit audio:
+   git add public/audio/audio_doanket.mp3
+   git commit -m "Add audio with Git LFS"
+   git push
+
+5. Vercel sẽ download file đúng từ Git LFS
+
+===================
+CÁCH 2: CLOUDINARY (KHUYÊN DÙNG - DÃN GIẢN NHẤT)
+===================
+
+1. Vào: https://cloudinary.com/users/register_free
+2. Sign up free
+3. Media Library → Upload → Chọn audio_doanket.mp3
+4. Copy URL
+5. Gửi URL cho tôi → Tôi update code
+6. Done! Audio sẽ nghe đúng
+
+===================
+CÁCH 3: JSDELIVR CDN (Miễn phí, không cần account)
+===================
+
+1. Push audio lên GitHub repo
+2. Dùng URL:
+   https://cdn.jsdelivr.net/gh/your-username/repo@main/public/audio/audio_doanket.mp3
+3. Update trong code
+4. Deploy
+
+===================
+KHUYẾN NGHỊ
+===================
+
+Dùng CLOUDINARY - Đơn giản nhất, nhanh nhất!
+
+Chỉ cần:
+- Sign up (30s)
+- Upload (30s)
+- Copy URL (10s)
+- Gửi cho tôi (10s)
+
+Total: 1 phút 20 giây!

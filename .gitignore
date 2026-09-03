@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Large media files - use CDN instead
+public/audio/*.mp3
+public/audio/*.wav
+public/audio/*.m4a

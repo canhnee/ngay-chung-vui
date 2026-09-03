@@ -249,7 +249,7 @@ export const fallbackWedding: WeddingData = {
     {
       id: 'music-1',
       wedding_id: 'fallback-1',
-      music_url: '/audio/audio_doanket.mp3',
+      music_url: 'https://res.cloudinary.com/hrmmd8ii/video/upload/v1788448042/audio_doanket.mp3',
       title: 'Wedding Music',
       enabled: true,
     },
