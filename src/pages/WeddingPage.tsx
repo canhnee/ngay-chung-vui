@@ -19,16 +19,7 @@ export default function WeddingPage() {
   const { data, loading } = useWedding('pham-hoa-tuan-anh');
   
   // Music hook - ALWAYS use fallback path to ensure audio loads
-  // Add cache busting for development
-  // TESTING: Use external MP3 to verify code works
-  const musicUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; // Test URL
-  // const musicUrl = '/audio/audio_doanket.mp3'; // Your audio - has codec issue
-  
-  // Debug: Log music URL
-  console.log('🎵 Music URL:', musicUrl);
-  console.log('🎵 Data loading:', loading);
-  console.log('🎵 Music from data:', data.music);
-  console.log('🎵 Window location origin:', window.location.origin);
+  const musicUrl = '/audio/audio_doanket.mp3';
   
   const { play, pause, isReady, error: audioError } = useMusic(musicUrl);
   
